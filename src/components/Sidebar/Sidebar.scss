@@ -1,0 +1,28 @@
+@import './../../shared/styles/colors.scss';
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: $dark-fuschia;
+  font-size: 15px;
+  width: 170px;
+}
+
+.app-name {
+  font-weight: 900;
+  font-size: 20px;
+  border-bottom: 1px solid;
+  padding-bottom: 10px;
+  margin: 10px;
+}
+
+.sidebar-item {
+  margin-left: 10px;
+  padding: 10px;
+}
+
+.active {
+  background-color: #1a1a1d;
+}

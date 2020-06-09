@@ -1,0 +1,30 @@
+@import './../../shared/styles/colors.scss';
+
+.boardgame-container {
+  display: flex;
+  margin-bottom: 20px;
+  min-height: 100px;
+  max-height: 100px;
+  border-bottom: 2px solid $gray;
+  padding-bottom: 20px;
+}
+
+.boardgame-image {
+  object-fit: scale-down;
+  width: 150px;
+}
+
+.boardgame-description {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid $gray;
+}
+
+.boardgame-name {
+  color: $dark-pink;
+  font-weight: 600;
+}
+
+.boardgame-rank {
+  font-size: 15px;
+}
