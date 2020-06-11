@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="app">
       <SideBar />
-      <div className='header-container'></div>
-      <div className='content-container'><BoardgamesList /></div>
+      <div className="header-container" />
+      <div className="content-container"><BoardgamesList /></div>
     </div>
   );
 }
