@@ -1,12 +1,15 @@
 @import './../../shared/styles/colors.scss';
 
+.boardgame-container + .boardgame-container{
+  margin-top: 20px;
+  border-top: 2px solid $gray;
+  padding-top: 20px;
+}
+
 .boardgame-container {
   display: flex;
-  margin-bottom: 20px;
   min-height: 100px;
   max-height: 100px;
-  border-bottom: 2px solid $gray;
-  padding-bottom: 20px;
 }
 
 .boardgame-image {
@@ -25,10 +28,7 @@
   font-weight: 600;
 }
 
-.boardgame-rank {
-  font-size: 15px;
-}
-
-.player-number {
-  font-size: 14px;
+.boardgame-extra-details {
+  font-size: calc(2px + 1.5vmin);
+  line-height: 20px;
 }

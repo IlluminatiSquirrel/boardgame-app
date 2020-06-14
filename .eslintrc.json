@@ -24,6 +24,12 @@
 		"@typescript-eslint"
 	],
 	"rules": {
+		"no-use-before-define": [
+			"error",
+			{
+				"functions": false
+			}
+		],
 		"react/jsx-filename-extension": [
 			2,
 			{
