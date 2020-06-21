@@ -15,25 +15,44 @@ interface Boardgame {
 }
 
 export default function BoardgamesList() {
-  const [items, setItems] = useState<ReadonlyArray<Boardgame>>([]);
-  let idList: ReadonlyArray<string> = [];
+  const [boardgames, setBoardgames] = useState<ReadonlyArray<Boardgame>>([]);
 
   useEffect(() => {
-    fetch('https://www.boardgamegeek.com/xmlapi2/hot?type=boardgames')
-      .then((res) => res.text())
-      .then((res) => {
-        idList = xml2js(res).elements[0].elements.map((element) => element.attributes.id);
-        return fetch(`http://127.0.0.1:8080/https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=${idList}`);
-      })
-      .then((res) => res.text())
-      .then((res) => parseResponse(res))
-      .catch((error) => console.error(error));
+    const fetchData = async () => {
+      try {
+        const hotBoardgames = await (await fetch('https://www.boardgamegeek.com/xmlapi2/hot?type=boardgames')).text();
+        const idList = xml2js(hotBoardgames).elements[0].elements.map((element) => element.attributes.id);
+        const boardgameDetailsResponse = await (await fetch(`http://127.0.0.1:8080/https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=${idList}`)).text();
+
+        const getBoardgamePricesPromise = async () => {
+          const boardgamePricesUrl = `https://boardgameprices.co.uk/api/info?eid=${idList}&sitename=localhost:3000`;
+          if ('caches' in window) {
+            const cacheName = 'boardgame-prices-cache';
+            const cache = await caches.open(cacheName);
+            const cacheResponse = await cache.match(boardgamePricesUrl);
+            if (cacheResponse) {
+              return cacheResponse;
+            }
+            const boardgamePricesResponse = await fetch(boardgamePricesUrl);
+            cache.put(boardgamePricesUrl, boardgamePricesResponse);
+            return boardgamePricesResponse;
+          }
+          return fetch(boardgamePricesUrl);
+        };
+        const boardgamePricesResponse = await (await getBoardgamePricesPromise()).json();
+        parseResponses(boardgameDetailsResponse, boardgamePricesResponse);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  function parseResponse(boardgameDetailsResult) {
-    const resultsJs = xml2js(boardgameDetailsResult);
+  function parseResponses(boardgameDetailsResponse, boardgamesPricesResponse) {
+    const resultsJs = xml2js(boardgameDetailsResponse);
     // console.log(resultsJs);
-    const boardgames = resultsJs.elements[0].elements.map(
+    setBoardgames(resultsJs.elements[0].elements.map(
       (boardgame) => {
         const boardgameObj: Boardgame = {
           id: boardgame.attributes.id,
@@ -63,13 +82,12 @@ export default function BoardgamesList() {
         });
         return boardgameObj;
       },
-    );
-    setItems(boardgames);
+    ));
   }
 
   return (
     <div>
-      {items.map((value) => (
+      {boardgames.map((value) => (
         <div key={value.id} className="boardgame-container">
           <img className="boardgame-image" alt="boardgame-thumbnail" src={value.thumbnail} />
           <div className="boardgame-description">

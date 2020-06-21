@@ -1,0 +1,49 @@
+@import './../shared/styles/colors.scss';
+
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin-left: 170px;
+  height: 55px;
+  background-color: $gray;
+}
+
+.search-box {
+  background-color: $dark-fuschia;
+  width: 40%;
+  margin: 6px;
+  border-radius: 25px 25px;
+  border: 1px solid $dark-fuschia;
+
+  &:focus-within {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+}
+
+input {
+  padding-left: 15px;
+  width: calc(100% - 57px);
+  height: 40px;
+  background-color: #9c9b9b;
+  border: none;
+  border-radius: 20px 20px 20px 20px;
+  font-size: 15px;
+  color: white;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+i {
+  position: relative;
+  top: 2px;
+  left: 6px;
+  color: #9c9b9b;
+}
+
+::placeholder { 
+  color: white;
+  opacity: 1;
+}
