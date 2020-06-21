@@ -12,6 +12,8 @@ interface Boardgame {
   maxPlaytime?: string;
   weight?: string;
   rating?: string;
+  price?: string;
+  priceUrl?: string;
 }
 
 export default function BoardgamesList() {
@@ -52,37 +54,39 @@ export default function BoardgamesList() {
   function parseResponses(boardgameDetailsResponse, boardgamesPricesResponse) {
     const resultsJs = xml2js(boardgameDetailsResponse);
     // console.log(resultsJs);
-    setBoardgames(resultsJs.elements[0].elements.map(
-      (boardgame) => {
-        const boardgameObj: Boardgame = {
-          id: boardgame.attributes.id,
-        };
-        boardgame.elements.forEach((boardgameProperty) => {
-          if (boardgameProperty.name === 'thumbnail') {
-            boardgameObj.thumbnail = boardgameProperty.elements[0].text;
-          } else if (boardgameProperty.name === 'name' && boardgameProperty.attributes.type === 'primary') {
-            boardgameObj.name = boardgameProperty.attributes.value;
-          } else if (boardgameProperty.name === 'minplayers') {
-            boardgameObj.minPlayers = boardgameProperty.attributes.value;
-          } else if (boardgameProperty.name === 'maxplayers') {
-            boardgameObj.maxPlayers = boardgameProperty.attributes.value;
-          } else if (boardgameProperty.name === 'minplaytime') {
-            boardgameObj.minPlaytime = boardgameProperty.attributes.value;
-          } else if (boardgameProperty.name === 'maxplaytime') {
-            boardgameObj.maxPlaytime = boardgameProperty.attributes.value;
-          } else if (boardgameProperty.name === 'statistics') {
-            boardgameProperty.elements[0].elements.forEach((boardgameStat) => {
-              if (boardgameStat.name === 'average') {
-                boardgameObj.rating = boardgameStat.attributes.value;
-              } else if (boardgameStat.name === 'averageweight') {
-                boardgameObj.weight = boardgameStat.attributes.value;
-              }
-            });
-          }
-        });
-        return boardgameObj;
-      },
-    ));
+    const boardgamesList = resultsJs.elements[0].elements.map((boardgame) => {
+      const boardgameObj: Boardgame = {
+        id: boardgame.attributes.id,
+      };
+      boardgame.elements.forEach((boardgameProperty) => {
+        if (boardgameProperty.name === 'thumbnail') {
+          boardgameObj.thumbnail = boardgameProperty.elements[0].text;
+        } else if (boardgameProperty.name === 'name' && boardgameProperty.attributes.type === 'primary') {
+          boardgameObj.name = boardgameProperty.attributes.value;
+        } else if (boardgameProperty.name === 'minplayers') {
+          boardgameObj.minPlayers = boardgameProperty.attributes.value;
+        } else if (boardgameProperty.name === 'maxplayers') {
+          boardgameObj.maxPlayers = boardgameProperty.attributes.value;
+        } else if (boardgameProperty.name === 'minplaytime') {
+          boardgameObj.minPlaytime = boardgameProperty.attributes.value;
+        } else if (boardgameProperty.name === 'maxplaytime') {
+          boardgameObj.maxPlaytime = boardgameProperty.attributes.value;
+        } else if (boardgameProperty.name === 'statistics') {
+          boardgameProperty.elements[0].elements.forEach((boardgameStat) => {
+            if (boardgameStat.name === 'average') {
+              boardgameObj.rating = boardgameStat.attributes.value;
+            } else if (boardgameStat.name === 'averageweight') {
+              boardgameObj.weight = boardgameStat.attributes.value;
+            }
+          });
+        }
+      });
+      const matchingBoardgame = boardgamesPricesResponse.items.find((boardgameItem) => boardgameItem.external_id === boardgameObj.id);
+      boardgameObj.price = matchingBoardgame?.prices[0].price;
+      boardgameObj.priceUrl = matchingBoardgame?.url;
+      return boardgameObj;
+    });
+    setBoardgames(boardgamesList);
   }
 
   return (
@@ -115,6 +119,11 @@ export default function BoardgamesList() {
                 {value.weight ? +parseFloat(value.weight).toFixed(2) : '?'}
               </div>
             </div>
+          </div>
+          <div className="boardgame-price">
+            {value.priceUrl
+              ? (<a href={value.priceUrl} title="Go to boardgameprices.co.uk for more details">{`${value.price}£`}</a>)
+              : <span title="Price is unknown"> ? </span>}
           </div>
         </div>
       ))}
