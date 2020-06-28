@@ -37,7 +37,10 @@ export default function BoardgamesList() {
             }
             const boardgamePricesResponse = await fetch(boardgamePricesUrl);
             cache.put(boardgamePricesUrl, boardgamePricesResponse);
-            return boardgamePricesResponse;
+            const newCacheResponse = await cache.match(boardgamePricesUrl);
+            if (newCacheResponse) {
+              return newCacheResponse;
+            }
           }
           return fetch(boardgamePricesUrl);
         };
@@ -51,10 +54,11 @@ export default function BoardgamesList() {
     fetchData();
   }, []);
 
-  function parseResponses(boardgameDetailsResponse, boardgamesPricesResponse) {
-    const resultsJs = xml2js(boardgameDetailsResponse);
-    // console.log(resultsJs);
-    const boardgamesList = resultsJs.elements[0].elements.map((boardgame) => {
+  function parseResponses(boardgameDetails, boardgamesPrices) {
+    const boardgameDetailsJs = xml2js(boardgameDetails);
+    console.log(boardgameDetailsJs);
+    console.log(boardgamesPrices);
+    const boardgamesList = boardgameDetailsJs.elements[0].elements.map((boardgame) => {
       const boardgameObj: Boardgame = {
         id: boardgame.attributes.id,
       };
@@ -81,8 +85,8 @@ export default function BoardgamesList() {
           });
         }
       });
-      const matchingBoardgame = boardgamesPricesResponse.items.find((boardgameItem) => boardgameItem.external_id === boardgameObj.id);
-      boardgameObj.price = matchingBoardgame?.prices[0].price;
+      const matchingBoardgame = boardgamesPrices.items.find((boardgameItem) => boardgameItem.external_id === boardgameObj.id);
+      boardgameObj.price = matchingBoardgame?.prices[0]?.price;
       boardgameObj.priceUrl = matchingBoardgame?.url;
       return boardgameObj;
     });
@@ -91,39 +95,44 @@ export default function BoardgamesList() {
 
   return (
     <div>
-      {boardgames.map((value) => (
+      {boardgames.map((value: Boardgame) => (
         <div key={value.id} className="boardgame-container">
           <img className="boardgame-image" alt="boardgame-thumbnail" src={value.thumbnail} />
           <div className="boardgame-description">
             <div className="boardgame-name">{value.name}</div>
             <div className="boardgame-extra-details">
-              <div className="player-number">
-                {'Players: '}
-                {value.minPlayers}
-                {' - '}
-                {value.maxPlayers}
+              <div className="grid-item rating">
+                <span>Rating</span>
+                <span>{value.rating ? +parseFloat(value.rating).toFixed(2) : '?'}</span>
               </div>
-              <div className="playtime">
-                {'Playtime: '}
-                {value.minPlaytime}
-                {' - '}
-                {value.maxPlaytime}
-                {' min'}
+              <div className="grid-item weight">
+                <span>Weight</span>
+                <span>{value.weight ? `${+parseFloat(value.weight).toFixed(2)} / 5` : '?'}</span>
               </div>
-              <div className="rating">
-                {'Rating: '}
-                {value.rating ? +parseFloat(value.rating).toFixed(2) : '?'}
+              <div className="grid-item player-number">
+                <span>Players</span>
+                {value.minPlayers !== value.maxPlayers
+                  ? <span>{`${value.minPlayers} - ${value.maxPlayers}`}</span>
+                  : <span>{`${value.minPlayers}`}</span>}
               </div>
-              <div className="weight">
-                {'Average weight: '}
-                {value.weight ? +parseFloat(value.weight).toFixed(2) : '?'}
+              <div className="grid-item playtime">
+                <span>Playtime</span>
+                {value.minPlaytime !== value.maxPlaytime
+                  ? <span>{`${value.minPlaytime} - ${value.maxPlaytime} min`}</span>
+                  : <span>{`${value.minPlaytime} min`}</span>}
               </div>
             </div>
           </div>
           <div className="boardgame-price">
+            <span className="price-header">Buying options</span>
             {value.priceUrl
-              ? (<a href={value.priceUrl} title="Go to boardgameprices.co.uk for more details">{`${value.price}£`}</a>)
-              : <span title="Price is unknown"> ? </span>}
+              ? (
+                <>
+                  <a href={value.priceUrl} title="Visit boardgameprices.co.uk to find out more">{`£${value.price}`}</a>
+                  <span className="best-available-price-header">Best availaible price</span>
+                </>
+              )
+              : <span className="unknown-price" title="Price is unknown"> ? </span>}
           </div>
         </div>
       ))}

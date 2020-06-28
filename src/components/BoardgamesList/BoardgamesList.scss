@@ -28,19 +28,70 @@
 .boardgame-name {
   color: $dark-pink;
   font-weight: 600;
+  margin-bottom: 10px;;
 }
 
 .boardgame-extra-details {
   font-size: calc(2px + 1.5vmin);
   line-height: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-item {
+  padding: 0 10px;
+}
+
+.grid-item:nth-child(1) {
+  padding-left: 0px;
+}
+
+.grid-item:nth-child(n+4) {
+  padding-right: 0px;
+}
+
+.grid-item span:nth-child(1) {
+  color: #3c9653;
+}
+
+.grid-item span:nth-child(2) {
+  font-size: 17px;
+}
+
+.grid-item + .grid-item {
+  border-left: 1px solid $gray;
 }
 
 .boardgame-price {
-  width: 80px;
-  margin: auto;
-  text-align: center;
-  color: $dark-pink; 
+  width: 125px;
+  // margin-top: 5px;
+  // margin: auto;
+  color: #C3073F;
+  display: flex;
+  flex-direction: column;
   a {
     color: $dark-pink; 
   }
+}
+
+.unknown-price {
+  text-align: center;
+  font-size: 17px;
+}
+
+.price-header {
+  font-size: 17px;
+  color: #c3073f;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.best-available-price-header {
+  font-size: 14px;
+  color: white;
 }
