@@ -67,7 +67,7 @@
   border-left: 1px solid $gray;
 }
 
-.boardgame-price {
+.boardgame-prices-container {
   width: 125px;
   // margin-top: 5px;
   // margin: auto;
@@ -77,6 +77,11 @@
   a {
     color: $dark-pink; 
   }
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
 }
 
 .unknown-price {

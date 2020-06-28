@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './BoardgamesList.scss';
+import './HotBoardgamesList.scss';
 import { xml2js } from 'xml-js';
+import { Boardgame } from '../../interfaces/Boardgame.interface';
+import BoardgamesListItem from '../BoardgamesListItem/BoardgamesListItem';
 
-interface Boardgame {
-  id: string;
-  name?: string;
-  thumbnail?: string;
-  minPlayers?: string;
-  maxPlayers?: string;
-  minPlaytime?: string;
-  maxPlaytime?: string;
-  weight?: string;
-  rating?: string;
-  price?: string;
-  priceUrl?: string;
-}
-
-export default function BoardgamesList() {
+export default function HotBoardgamesList() {
   const [boardgames, setBoardgames] = useState<ReadonlyArray<Boardgame>>([]);
 
   useEffect(() => {
@@ -36,6 +24,7 @@ export default function BoardgamesList() {
               return cacheResponse;
             }
             const boardgamePricesResponse = await fetch(boardgamePricesUrl);
+            console.log(boardgamePricesResponse);
             cache.put(boardgamePricesUrl, boardgamePricesResponse);
             const newCacheResponse = await cache.match(boardgamePricesUrl);
             if (newCacheResponse) {
@@ -95,46 +84,8 @@ export default function BoardgamesList() {
 
   return (
     <div>
-      {boardgames.map((value: Boardgame) => (
-        <div key={value.id} className="boardgame-container">
-          <img className="boardgame-image" alt="boardgame-thumbnail" src={value.thumbnail} />
-          <div className="boardgame-description">
-            <div className="boardgame-name">{value.name}</div>
-            <div className="boardgame-extra-details">
-              <div className="grid-item rating">
-                <span>Rating</span>
-                <span>{value.rating ? +parseFloat(value.rating).toFixed(2) : '?'}</span>
-              </div>
-              <div className="grid-item weight">
-                <span>Weight</span>
-                <span>{value.weight ? `${+parseFloat(value.weight).toFixed(2)} / 5` : '?'}</span>
-              </div>
-              <div className="grid-item player-number">
-                <span>Players</span>
-                {value.minPlayers !== value.maxPlayers
-                  ? <span>{`${value.minPlayers} - ${value.maxPlayers}`}</span>
-                  : <span>{`${value.minPlayers}`}</span>}
-              </div>
-              <div className="grid-item playtime">
-                <span>Playtime</span>
-                {value.minPlaytime !== value.maxPlaytime
-                  ? <span>{`${value.minPlaytime} - ${value.maxPlaytime} min`}</span>
-                  : <span>{`${value.minPlaytime} min`}</span>}
-              </div>
-            </div>
-          </div>
-          <div className="boardgame-price">
-            <span className="price-header">Buying options</span>
-            {value.priceUrl
-              ? (
-                <>
-                  <a href={value.priceUrl} title="Visit boardgameprices.co.uk to find out more">{`£${value.price}`}</a>
-                  <span className="best-available-price-header">Best availaible price</span>
-                </>
-              )
-              : <span className="unknown-price" title="Price is unknown"> ? </span>}
-          </div>
-        </div>
+      {boardgames.map((boardgame: Boardgame) => (
+        <BoardgamesListItem key={boardgame.id} boardgame={boardgame} />
       ))}
     </div>
   );

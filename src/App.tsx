@@ -1,5 +1,5 @@
 import React from 'react';
-import BoardgamesList from './components/BoardgamesList/BoardgamesList';
+import HotBoardgamesList from './components/HotBoardgamesList/HotBoardgamesList';
 import './App.scss';
 import SideBar from './components/Sidebar/Sidebar';
 import Topbar from './Topbar/Topbar';
@@ -9,7 +9,7 @@ function App() {
     <div className="app">
       <SideBar />
       <Topbar />
-      <div className="content-container"><BoardgamesList /></div>
+      <div className="content-container"><HotBoardgamesList /></div>
     </div>
   );
 }
