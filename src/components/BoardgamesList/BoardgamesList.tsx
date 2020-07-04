@@ -33,6 +33,7 @@ export default function BoardgamesList() {
             const cache = await caches.open(cacheName);
             const cacheResponse = await cache.match(boardgamePricesUrl);
             if (cacheResponse) {
+              console.log(cacheResponse.headers)
               return cacheResponse;
             }
             const boardgamePricesResponse = await fetch(boardgamePricesUrl);
@@ -128,8 +129,8 @@ export default function BoardgamesList() {
             {value.priceUrl
               ? (
                 <>
-                  <a href={value.priceUrl} title="Visit boardgameprices.co.uk to find out more">{`£${value.price}`}</a>
                   <span className="best-available-price-header">Best availaible price</span>
+                  <a href={value.priceUrl} title="Visit boardgameprices.co.uk to find out more">{`£${value.price}`}</a>
                 </>
               )
               : <span className="unknown-price" title="Price is unknown"> ? </span>}
