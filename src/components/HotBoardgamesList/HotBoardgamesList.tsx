@@ -4,6 +4,9 @@ import { xml2js } from 'xml-js';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import BoardgamesListItem from '../BoardgamesListItem/BoardgamesListItem';
 
+// 1 hour
+const CACHING_DURATION = 3600;
+
 export default function HotBoardgamesList() {
   const [boardgames, setBoardgames] = useState<ReadonlyArray<Boardgame>>([]);
 
@@ -24,17 +27,29 @@ export default function HotBoardgamesList() {
               return cacheResponse;
             }
             const boardgamePricesResponse = await fetch(boardgamePricesUrl);
-            console.log(boardgamePricesResponse);
-            cache.put(boardgamePricesUrl, boardgamePricesResponse);
-            const newCacheResponse = await cache.match(boardgamePricesUrl);
-            if (newCacheResponse) {
-              return newCacheResponse;
-            }
+            const boardgamePricesResponseCopy = boardgamePricesResponse.clone();
+
+            const expires = new Date();
+            expires.setSeconds(expires.getSeconds() + CACHING_DURATION);
+
+            const cachedResponseFields = {
+              status: boardgamePricesResponse.status,
+              statusText: boardgamePricesResponse.statusText,
+              headers: { 'Cache-Expires': expires.toUTCString() },
+            };
+
+            boardgamePricesResponse.headers.forEach((v, k) => {
+              cachedResponseFields.headers[k] = v;
+            });
+
+            const body = await boardgamePricesResponse.text();
+            cache.put(boardgamePricesUrl, new Response(body, cachedResponseFields));
+            return boardgamePricesResponseCopy;
           }
           return fetch(boardgamePricesUrl);
         };
-        const boardgamePricesResponse = await (await getBoardgamePricesPromise()).json();
-        parseResponses(boardgameDetailsResponse, boardgamePricesResponse);
+        const boardgamePricesResponse = await getBoardgamePricesPromise();
+        parseResponses(boardgameDetailsResponse, await boardgamePricesResponse.json());
       } catch (error) {
         console.error(error);
       }
@@ -45,8 +60,8 @@ export default function HotBoardgamesList() {
 
   function parseResponses(boardgameDetails, boardgamesPrices) {
     const boardgameDetailsJs = xml2js(boardgameDetails);
-    console.log(boardgameDetailsJs);
-    console.log(boardgamesPrices);
+    // console.log(boardgameDetailsJs);
+    // console.log(boardgamesPrices);
     const boardgamesList = boardgameDetailsJs.elements[0].elements.map((boardgame) => {
       const boardgameObj: Boardgame = {
         id: boardgame.attributes.id,
@@ -83,10 +98,10 @@ export default function HotBoardgamesList() {
   }
 
   return (
-    <div>
+    <ul>
       {boardgames.map((boardgame: Boardgame) => (
         <BoardgamesListItem key={boardgame.id} boardgame={boardgame} />
       ))}
-    </div>
+    </ul>
   );
 }

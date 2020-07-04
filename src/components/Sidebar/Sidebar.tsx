@@ -3,10 +3,12 @@ import './Sidebar.scss';
 
 export default function SideBar() {
   return (
-    <div className="sidebar">
-      <div className="app-name">BOARDGAMES</div>
-      <div className="sidebar-item active">WHAT'S HOT</div>
-      <div className="sidebar-item">MY COLLECTION</div>
-    </div>
+    <nav>
+      <ul className="sidebar">
+        <li className="app-name">BOARDGAMES</li>
+        <li className="sidebar-item active">WHAT'S HOT</li>
+        <li className="sidebar-item">MY COLLECTION</li>
+      </ul>
+    </nav>
   );
 }

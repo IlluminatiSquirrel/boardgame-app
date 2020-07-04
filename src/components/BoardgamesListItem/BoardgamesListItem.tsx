@@ -63,7 +63,7 @@ function Price({ priceUrl, price }: { priceUrl: string | undefined, price: strin
 
 export default function BoardgamesListItem({ boardgame }: Props) {
   return (
-    <div className="boardgame-container">
+    <li className="boardgame-container">
       <img className="boardgame-image" alt="boardgame-thumbnail" src={boardgame.thumbnail} />
       <div className="boardgame-description">
         <div className="boardgame-name">{boardgame.name}</div>
@@ -78,6 +78,6 @@ export default function BoardgamesListItem({ boardgame }: Props) {
         <span className="price-header">Buying options</span>
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
       </div>
-    </div>
+    </li>
   );
 }
