@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './HotBoardgamesList.scss';
 import { xml2js } from 'xml-js';
-import moment, { Moment } from 'moment';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import BoardgamesListItem from '../BoardgamesListItem/BoardgamesListItem';
-
-// 1 hour
-const CACHING_DURATION = 3600;
+import { checkCache, cacheResponse } from '../../shared/cache/caching-util';
 
 export default function HotBoardgamesList() {
   const [boardgames, setBoardgames] = useState<ReadonlyArray<Boardgame>>([]);
@@ -16,7 +13,9 @@ export default function HotBoardgamesList() {
       try {
         const hotBoardgames: string = await (await fetch('https://www.boardgamegeek.com/xmlapi2/hot?type=boardgames')).text();
         const idList: ReadonlyArray<string> = xml2js(hotBoardgames).elements[0].elements.map((element) => element.attributes.id);
-        const boardgameDetailsResponse: string = await (await fetch(`http://127.0.0.1:8080/https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=${idList}`)).text();
+        const boardgameDetailsResponse: string = await (
+          await fetch(`http://127.0.0.1:8080/https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=${idList}`)
+        ).text();
 
         const getBoardgamePricesPromise = async (): Promise<Response> => {
           const boardgamePricesUrl: string = `https://boardgameprices.co.uk/api/info?eid=${idList}&sitename=localhost:3000`;
@@ -42,38 +41,6 @@ export default function HotBoardgamesList() {
 
     fetchData();
   }, []);
-
-  async function checkCache(url: string, cache: Cache): Promise<Response | undefined> {
-    const cachedResponse: Response | undefined = await cache.match(url);
-    if (cachedResponse) {
-      const cacheExpiryDate: string | null = cachedResponse.headers.get('cache-expires');
-      if (cacheExpiryDate && moment(cacheExpiryDate).isAfter(moment.utc())) {
-        return cachedResponse;
-      }
-    }
-    return undefined;
-  }
-
-  async function cacheResponse(url: string, cache: Cache): Promise<Response> {
-    const response: Response = await fetch(url);
-    const responseCopy: Response = response.clone();
-
-    const expires: Moment = moment.utc().add(moment.duration(CACHING_DURATION, 's'));
-
-    const cachedResponseFields = {
-      status: response.status,
-      statusText: response.statusText,
-      headers: { 'cache-expires': expires.toString() },
-    };
-
-    response.headers.forEach((v, k) => {
-      cachedResponseFields.headers[k] = v;
-    });
-
-    const body: string = await response.text();
-    cache.put(url, new Response(body, cachedResponseFields));
-    return responseCopy;
-  }
 
   function parseResponses(boardgameDetails, boardgamesPrices): void {
     const boardgameDetailsJs = xml2js(boardgameDetails);
