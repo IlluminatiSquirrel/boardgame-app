@@ -13,4 +13,12 @@
   margin-left: 170px;
   margin-top: 55px;
   padding: 20px;
+  max-width: 900px;
+  min-width: 200px;
 }
+
+// @media screen and (min-width: 1000px) {
+//   .content-container {
+//     width: 950px;
+//   }
+// }

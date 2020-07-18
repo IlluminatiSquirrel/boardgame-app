@@ -82,7 +82,7 @@ export default function HotBoardgamesList() {
   }
 
   return (
-    <ul>
+    <ul className="boardgame-list-container">
       {boardgames.map((boardgame: Boardgame) => (
         <BoardgamesListItem key={boardgame.id} boardgame={boardgame} />
       ))}
