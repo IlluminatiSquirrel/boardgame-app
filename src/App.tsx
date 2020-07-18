@@ -2,7 +2,7 @@ import React from 'react';
 import HotBoardgamesList from './components/HotBoardgamesList/HotBoardgamesList';
 import './App.scss';
 import SideBar from './components/Sidebar/Sidebar';
-import Topbar from './Topbar/Topbar';
+import Topbar from './components/Topbar/Topbar';
 
 function App() {
   return (
