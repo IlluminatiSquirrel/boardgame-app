@@ -18,7 +18,8 @@
   border: 1px solid $dark-fuschia;
 
   &:focus-within {
-    outline: -webkit-focus-ring-color auto 1px;
+    outline: none;
+    border: 2px solid white;
   }
 }
 
@@ -31,6 +32,7 @@ input {
   border-radius: 20px 20px 20px 20px;
   font-size: 15px;
   color: white;
+  text-overflow: ellipsis;
 
   &:focus {
     outline: none;

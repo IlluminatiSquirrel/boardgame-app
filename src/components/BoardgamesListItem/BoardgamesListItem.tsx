@@ -2,24 +2,38 @@ import React from 'react';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import './BoardgamesListItem.scss';
 
-interface Props {
+type Props = {
   boardgame: Boardgame
 }
 
 function Rating({ rating }: { rating: string | undefined }) {
+  function getRating(): string | number {
+    if (rating && rating !== '0') {
+      return +parseFloat(rating).toFixed(2);
+    }
+    return '--';
+  }
+
   return (
     <div className="grid-item rating">
       <span>Rating</span>
-      <span>{rating ? +parseFloat(rating).toFixed(2) : '?'}</span>
+      <span>{getRating()}</span>
     </div>
   );
 }
 
 function Weight({ weight }: { weight: string | undefined }) {
+  function getWeight(): string {
+    if (weight && weight !== '0') {
+      return `${+parseFloat(weight).toFixed(2)} / 5`;
+    }
+    return '--';
+  }
+
   return (
     <div className="grid-item weight">
       <span>Weight</span>
-      <span>{weight ? `${+parseFloat(weight).toFixed(2)} / 5` : '?'}</span>
+      <span>{getWeight()}</span>
     </div>
   );
 }
@@ -49,14 +63,16 @@ function Playtime({ minPlaytime, maxPlaytime }: { minPlaytime: string | undefine
 function Price({ priceUrl, price }: { priceUrl: string | undefined, price: string | undefined }) {
   return (
     <div className="price">
-      {priceUrl
+      {priceUrl && price
         ? (
           <>
             <span className="best-available-price-header">Best availaible price</span>
-            <a href={priceUrl} title="Visit boardgameprices.co.uk to find out more">{`£${price}`}</a>
+            <a href={priceUrl} title="Visit boardgameprices.co.uk to find out more">
+              {(+price).toLocaleString(undefined, { style: 'currency', currency: 'GBP' })}
+            </a>
           </>
         )
-        : <span className="unknown-price" title="Price is unknown"> ? </span>}
+        : <span className="unknown-price" title="Information unavailble"> -- </span>}
     </div>
   );
 }
@@ -74,9 +90,12 @@ export default function BoardgamesListItem({ boardgame }: Props) {
           <Playtime minPlaytime={boardgame.minPlaytime} maxPlaytime={boardgame.maxPlaytime} />
         </div>
       </div>
-      <div className="boardgame-prices-container">
+      <div className="boardgame-price">
         <span className="price-header">Buying options</span>
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
+      </div>
+      <div className="menu-container">
+        <span>Add to your wishlist</span>
       </div>
     </li>
   );

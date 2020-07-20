@@ -10,10 +10,6 @@
   width: 170px;
   padding: 0;
   margin: 0;
-
-  li {
-    display: block;
-  }
 }
 
 .app-name {
@@ -27,9 +23,32 @@
 
 .sidebar-item {
   margin-left: 10px;
+  margin-bottom: 5px;
   padding: 10px;
+  width: calc(100% - 10px);
+  text-align: inherit;
 }
 
 .active {
   background-color: #1a1a1d;
+  -webkit-transition: background-color 1000ms ease-in-out;
+  -ms-transition: background-color 1000ms ease-in-out;
+  transition: background-color 1000ms ease-in-out;
+}
+
+button {
+  color: inherit;
+  background-color: transparent;
+  font-size: inherit;
+  border: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border: 2px solid white;
+  }
+}
+
+li {
+  display: block;
 }
