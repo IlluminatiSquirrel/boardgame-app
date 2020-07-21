@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  margin-left: 170px;
+  margin-left: 200px;
   height: 55px;
   background-color: $gray;
 }
@@ -27,7 +27,7 @@ input {
   padding-left: 15px;
   width: calc(100% - 57px);
   height: 40px;
-  background-color: #9c9b9b;
+  background-color: $light-gray;
   border: none;
   border-radius: 20px 20px 20px 20px;
   font-size: 15px;
@@ -36,10 +36,11 @@ input {
 
   &:focus {
     outline: none;
+    border: none;
   }
 }
 
-i {
+.search-icon {
   position: relative;
   top: 2px;
   left: 6px;

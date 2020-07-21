@@ -9,28 +9,35 @@ type Props = {
 
 export default function SideBar({ onActiveChange, activeView }: Props) {
   return (
-    <nav>
-      <ul className="sidebar">
-        <li className="app-name">BOARDGAMES</li>
-        <li>
-          <button
-            className={`sidebar-item ${activeView === 'hotBoardgames' ? 'active' : null}`}
-            type="button"
-            onClick={() => onActiveChange('hotBoardgames')}
-          >
-            WHAT'S HOT
-          </button>
-        </li>
-        <li>
-          <button
-            className={`sidebar-item ${activeView === 'collection' ? 'active' : null}`}
-            type="button"
-            onClick={() => onActiveChange('collection')}
-          >
-            MY COLLECTION
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <div className="sidebar">
+      <h1 className="app-name">
+        <span>BOARDGAMES</span>
+        <i className="fas fa-dice" />
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <button
+              className={`sidebar-item ${activeView === 'hotBoardgames' ? 'active' : null}`}
+              type="button"
+              onClick={() => onActiveChange('hotBoardgames')}
+            >
+              <i className="fas fa-fire fire-icon nav-item-icon" />
+              <span>WHAT'S HOT</span>
+            </button>
+          </li>
+          <li>
+            <button
+              className={`sidebar-item ${activeView === 'collection' ? 'active' : null}`}
+              type="button"
+              onClick={() => onActiveChange('collection')}
+            >
+              <i className="fas fa-box-open box-icon nav-item-icon" />
+              <span>MY COLLECTION</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 }

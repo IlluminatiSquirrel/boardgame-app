@@ -7,9 +7,12 @@
   height: 100%;
   background-color: $dark-fuschia;
   font-size: 15px;
-  width: 170px;
-  padding: 0;
-  margin: 0;
+  width: 200px;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .app-name {
@@ -27,16 +30,6 @@
   padding: 10px;
   width: calc(100% - 10px);
   text-align: inherit;
-}
-
-.active {
-  background-color: #1a1a1d;
-  -webkit-transition: background-color 1000ms ease-in-out;
-  -ms-transition: background-color 1000ms ease-in-out;
-  transition: background-color 1000ms ease-in-out;
-}
-
-button {
   color: inherit;
   background-color: transparent;
   font-size: inherit;
@@ -44,11 +37,35 @@ button {
   cursor: pointer;
 
   &:focus {
-    outline: none;
-    border: 2px solid white;
+    outline: none; 
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
   }
+}
+
+.active {
+  background-color: $light-black;
+  -webkit-transition: background-color 1000ms ease-in-out;
+  -ms-transition: background-color 1000ms ease-in-out;
+  transition: background-color 1000ms ease-in-out;
 }
 
 li {
   display: block;
+}
+
+.nav-item-icon {
+  font-size: 20px;
+}
+
+.fire-icon {
+  color: #F44336;
+  padding-right: 10px;
+  padding-left: 5px;
+}
+
+.box-icon {
+  color: #FFEB3B;
+  padding-right: 7px;
 }

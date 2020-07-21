@@ -78,6 +78,10 @@ function Price({ priceUrl, price }: { priceUrl: string | undefined, price: strin
 }
 
 export default function BoardgamesListItem({ boardgame }: Props) {
+  function addToWishlist() {
+
+  }
+
   return (
     <li className="boardgame-container">
       <img className="boardgame-image" alt="boardgame-thumbnail" src={boardgame.thumbnail} />
@@ -95,7 +99,14 @@ export default function BoardgamesListItem({ boardgame }: Props) {
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
       </div>
       <div className="menu-container">
-        <span>Add to your wishlist</span>
+        <button
+          className="add-to-wishlist-button"
+          type="button"
+          onClick={() => addToWishlist()}
+        >
+          <i className="fas fa-heart" />
+          <span>Add to your wishlist</span>
+        </button>
       </div>
     </li>
   );

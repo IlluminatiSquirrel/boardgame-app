@@ -1,4 +1,7 @@
 .boardgame-list-container {
-  padding: 0;
+  margin: 0;
   overflow: auto;
+  padding: 20px;
+  max-width: 900px;
+  min-width: 200px;
 }
