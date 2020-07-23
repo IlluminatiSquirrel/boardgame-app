@@ -4,6 +4,7 @@ import { xml2js } from 'xml-js';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import BoardgamesListItem from '../BoardgamesListItem/BoardgamesListItem';
 import { checkCache, cacheResponse } from '../../shared/cache/caching-util';
+import { getWishlistedBoardgameIds } from '../../shared/local-storage/local-storage-util';
 
 export default function HotBoardgamesList() {
   const [boardgames, setBoardgames] = useState<ReadonlyArray<Boardgame>>([]);
@@ -38,17 +39,18 @@ export default function HotBoardgamesList() {
         console.error(error);
       }
     };
-
     fetchData();
   }, []);
 
   function parseResponses(boardgameDetails, boardgamesPrices): void {
+    const wishlistedBoardgameIds = getWishlistedBoardgameIds();
     const boardgameDetailsJs = xml2js(boardgameDetails);
     // console.log(boardgameDetailsJs);
     // console.log(boardgamesPrices);
     const boardgamesList = boardgameDetailsJs.elements[0].elements.map((boardgame) => {
       const boardgameObj: Boardgame = {
         id: boardgame.attributes.id,
+        wishlisted: !!wishlistedBoardgameIds.find((id: string) => id === boardgame.attributes.id),
       };
       boardgame.elements.forEach((boardgameProperty) => {
         if (boardgameProperty.name === 'thumbnail') {
@@ -73,6 +75,7 @@ export default function HotBoardgamesList() {
           });
         }
       });
+
       const matchingBoardgame = boardgamesPrices.items.find((boardgameItem) => boardgameItem.external_id === boardgameObj.id);
       boardgameObj.price = matchingBoardgame?.prices[0]?.price;
       boardgameObj.priceUrl = matchingBoardgame?.url;

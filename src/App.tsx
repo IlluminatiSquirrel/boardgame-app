@@ -5,6 +5,7 @@ import SideBar from './components/Sidebar/Sidebar';
 import Topbar from './components/Topbar/Topbar';
 import CollectionList from './components/CollectionList/CollectionList';
 import { ActiveViewType } from './shared/other/custom-types';
+import Wishlist from './components/Wishlist/Wishlist';
 
 export default function App() {
 
@@ -17,6 +18,10 @@ export default function App() {
 
     if (activeView === 'collection') {
       return <CollectionList />;
+    }
+
+    if (activeView === 'wishlist') {
+      return <Wishlist />;
     }
 
     return (<div />);

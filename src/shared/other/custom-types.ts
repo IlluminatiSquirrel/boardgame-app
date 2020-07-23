@@ -1,1 +1,1 @@
-export type ActiveViewType = 'hotBoardgames' | 'collection';
+export type ActiveViewType = 'hotBoardgames' | 'collection' | 'wishlist';

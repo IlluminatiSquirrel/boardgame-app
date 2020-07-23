@@ -10,4 +10,5 @@ export interface Boardgame {
   rating?: string;
   price?: string;
   priceUrl?: string;
+  wishlisted?: boolean;
 }

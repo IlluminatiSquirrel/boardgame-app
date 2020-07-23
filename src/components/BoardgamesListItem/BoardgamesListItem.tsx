@@ -1,6 +1,7 @@
 import React from 'react';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import './BoardgamesListItem.scss';
+import { addToWishlist, removeFromWishlist } from '../../shared/local-storage/local-storage-util';
 
 type Props = {
   boardgame: Boardgame
@@ -78,15 +79,11 @@ function Price({ priceUrl, price }: { priceUrl: string | undefined, price: strin
 }
 
 export default function BoardgamesListItem({ boardgame }: Props) {
-  function addToWishlist() {
-
-  }
-
   return (
     <li className="boardgame-container">
       <img className="boardgame-image" alt="boardgame-thumbnail" src={boardgame.thumbnail} />
       <div className="boardgame-description">
-        <div className="boardgame-name">{boardgame.name}</div>
+        <div className="boardgame-name" title={boardgame.name}>{boardgame.name}</div>
         <div className="boardgame-extra-details">
           <Rating rating={boardgame.rating} />
           <Weight weight={boardgame.weight} />
@@ -99,14 +96,27 @@ export default function BoardgamesListItem({ boardgame }: Props) {
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
       </div>
       <div className="menu-container">
-        <button
-          className="add-to-wishlist-button"
-          type="button"
-          onClick={() => addToWishlist()}
-        >
-          <i className="fas fa-heart" />
-          <span>Add to your wishlist</span>
-        </button>
+        {boardgame.wishlisted
+          ? (
+            <button
+              className="on-wishlist-button"
+              type="button"
+              onClick={() => removeFromWishlist(boardgame)}
+            >
+              <i className="fas fa-check-square" />
+              <span>On wishlist</span>
+            </button>
+          )
+          : (
+            <button
+              className="add-to-wishlist-button"
+              type="button"
+              onClick={() => addToWishlist(boardgame)}
+            >
+              <i className="fas fa-heart" />
+              <span>Add to wishlist</span>
+            </button>
+          )}
       </div>
     </li>
   );

@@ -33,7 +33,17 @@ export default function SideBar({ onActiveChange, activeView }: Props) {
               onClick={() => onActiveChange('collection')}
             >
               <i className="fas fa-box-open box-icon nav-item-icon" />
-              <span>MY COLLECTION</span>
+              <span>COLLECTION</span>
+            </button>
+          </li>
+          <li>
+            <button
+              className={`sidebar-item ${activeView === 'wishlist' ? 'active' : null}`}
+              type="button"
+              onClick={() => onActiveChange('wishlist')}
+            >
+              <i className="fas fa-heart heart-icon nav-item-icon" />
+              <span>WISHLIST</span>
             </button>
           </li>
         </ul>
