@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Boardgame } from '../../interfaces/Boardgame.interface';
 import './BoardgamesListItem.scss';
 import { addToWishlist, removeFromWishlist } from '../../shared/local-storage/local-storage-util';
@@ -79,6 +79,12 @@ function Price({ priceUrl, price }: { priceUrl: string | undefined, price: strin
 }
 
 export default function BoardgamesListItem({ boardgame }: Props) {
+  const [isWishlisted, setIsWishlisted] = useState<boolean>();
+
+  useEffect(() => {
+    setIsWishlisted(boardgame.wishlisted);
+  }, []);
+
   return (
     <li className="boardgame-container">
       <img className="boardgame-image" alt="boardgame-thumbnail" src={boardgame.thumbnail} />
@@ -96,12 +102,12 @@ export default function BoardgamesListItem({ boardgame }: Props) {
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
       </div>
       <div className="menu-container">
-        {boardgame.wishlisted
+        {isWishlisted
           ? (
             <button
               className="on-wishlist-button"
               type="button"
-              onClick={() => removeFromWishlist(boardgame)}
+              onClick={() => { setIsWishlisted(false); removeFromWishlist(boardgame); }}
             >
               <i className="fas fa-check-square" />
               <span>On wishlist</span>
@@ -111,7 +117,7 @@ export default function BoardgamesListItem({ boardgame }: Props) {
             <button
               className="add-to-wishlist-button"
               type="button"
-              onClick={() => addToWishlist(boardgame)}
+              onClick={() => { setIsWishlisted(true); addToWishlist(boardgame); }}
             >
               <i className="fas fa-heart" />
               <span>Add to wishlist</span>
