@@ -78,12 +78,47 @@ function Price({ priceUrl, price }: { priceUrl: string | undefined, price: strin
   );
 }
 
+function WishlistButton({ isWishlisted, onAddClick, onRemoveClick }: { isWishlisted: boolean, onAddClick: () => void, onRemoveClick: () => void }) {
+  if (isWishlisted) {
+    return (
+      <button
+        className="on-wishlist-button"
+        type="button"
+        onClick={() => onRemoveClick()}
+      >
+        <i className="fas fa-check-square" />
+        <span>On wishlist</span>
+      </button>
+    );
+  }
+  return (
+    <button
+      className="add-to-wishlist-button"
+      type="button"
+      onClick={() => onAddClick()}
+    >
+      <i className="fas fa-heart" />
+      <span>Add to wishlist</span>
+    </button>
+  );
+}
+
 export default function BoardgamesListItem({ boardgame }: Props) {
-  const [isWishlisted, setIsWishlisted] = useState<boolean>();
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsWishlisted(boardgame.wishlisted);
+    setIsWishlisted(boardgame.wishlisted ? boardgame.wishlisted : false);
   }, []);
+
+  function handleAdd() {
+    setIsWishlisted(true);
+    addToWishlist(boardgame);
+  }
+
+  function handleRemove() {
+    setIsWishlisted(false);
+    removeFromWishlist(boardgame);
+  }
 
   return (
     <li className="boardgame-container">
@@ -102,27 +137,11 @@ export default function BoardgamesListItem({ boardgame }: Props) {
         <Price priceUrl={boardgame.priceUrl} price={boardgame.price} />
       </div>
       <div className="menu-container">
-        {isWishlisted
-          ? (
-            <button
-              className="on-wishlist-button"
-              type="button"
-              onClick={() => { setIsWishlisted(false); removeFromWishlist(boardgame); }}
-            >
-              <i className="fas fa-check-square" />
-              <span>On wishlist</span>
-            </button>
-          )
-          : (
-            <button
-              className="add-to-wishlist-button"
-              type="button"
-              onClick={() => { setIsWishlisted(true); addToWishlist(boardgame); }}
-            >
-              <i className="fas fa-heart" />
-              <span>Add to wishlist</span>
-            </button>
-          )}
+        <WishlistButton
+          isWishlisted={isWishlisted}
+          onAddClick={handleAdd}
+          onRemoveClick={handleRemove}
+        />
       </div>
     </li>
   );
