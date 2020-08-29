@@ -1,17 +1,45 @@
-import React from 'react';
-import BoardgamesList from './components/BoardgamesList/BoardgamesList';
+import React, { ReactElement, useState } from 'react';
+import HotBoardgamesList from './components/HotBoardgamesList/HotBoardgamesList';
 import './App.scss';
 import SideBar from './components/Sidebar/Sidebar';
-import Topbar from './Topbar/Topbar';
+import Topbar from './components/Topbar/Topbar';
+import CollectionList from './components/CollectionList/CollectionList';
+import { ActiveViewType } from './shared/other/custom-types';
+import Wishlist from './components/Wishlist/Wishlist';
 
-function App() {
+export default function App() {
+
+  const [activeView, setActiveView] = useState<ActiveViewType>('hotBoardgames');
+
+  function getActiveView(): ReactElement {
+    if (activeView === 'hotBoardgames') {
+      return <HotBoardgamesList />;
+    }
+
+    if (activeView === 'collection') {
+      return <CollectionList />;
+    }
+
+    if (activeView === 'wishlist') {
+      return <Wishlist />;
+    }
+
+    return (<div />);
+  }
+
+  function handleActiveChange(newActiveView: ActiveViewType): void {
+    if (activeView !== newActiveView) {
+      setActiveView(newActiveView);
+    }
+  }
+
   return (
     <div className="app">
-      <SideBar />
+      <SideBar activeView={activeView} onActiveChange={handleActiveChange} />
       <Topbar />
-      <div className="content-container"><BoardgamesList /></div>
+      <div className="content-container">
+        {getActiveView()}
+      </div>
     </div>
   );
 }
-
-export default App;

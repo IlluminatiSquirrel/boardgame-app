@@ -7,7 +7,12 @@
   height: 100%;
   background-color: $dark-fuschia;
   font-size: 15px;
-  width: 170px;
+  width: 200px;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .app-name {
@@ -21,9 +26,49 @@
 
 .sidebar-item {
   margin-left: 10px;
+  margin-bottom: 5px;
   padding: 10px;
+  width: calc(100% - 10px);
+  text-align: inherit;
+  color: inherit;
+  background-color: transparent;
+  font-size: inherit;
+  border: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none; 
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+  }
 }
 
 .active {
-  background-color: #1a1a1d;
+  background-color: $light-black;
+  -webkit-transition: background-color 1000ms ease-in-out;
+  -ms-transition: background-color 1000ms ease-in-out;
+  transition: background-color 1000ms ease-in-out;
+}
+
+li {
+  display: block;
+}
+
+.nav-item-icon {
+  font-size: 20px;
+}
+
+.fire-icon {
+  padding-right: 10px;
+  padding-left: 5px;
+}
+
+.box-icon {
+  padding-right: 7px;
+}
+
+.heart-icon {
+  padding-right: 8px;
+  padding-left: 3px;
 }

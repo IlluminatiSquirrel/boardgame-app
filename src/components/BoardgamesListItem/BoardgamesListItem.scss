@@ -7,22 +7,27 @@
 }
 
 .boardgame-container {
-  display: flex;
+  display: inline-flex;
   min-height: 100px;
   max-height: 100px;
+  width: 100%;
+}
+
+.boardgame-image, .boardgame-description, .boardgame-price {
+  padding-right: 10px;
+  margin-right: 10px;
+  border-right: 1px solid $gray;
 }
 
 .boardgame-image {
   object-fit: scale-down;
-  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
 }
 
 .boardgame-description {
-  margin: 0 10px;
-  padding: 0 10px;
-  border-left: 1px solid $gray;
-  border-right: 1px solid $gray;
-  flex: 2
+  flex: 2;
+  min-width: 0;
 }
 
 .boardgame-name {
@@ -30,6 +35,9 @@
   font-weight: 600;
   margin-bottom: 10px;
   line-height: 23px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .boardgame-extra-details {
@@ -42,9 +50,7 @@
 .grid-item {
   display: flex;
   flex-direction: column;
-}
-
-.grid-item {
+  min-width: 50px;
   padding: 0 10px;
 }
 
@@ -54,14 +60,11 @@
 
 .grid-item:nth-child(n+4) {
   padding-right: 0px;
+  min-width: 70px;
 }
 
 .grid-item span:nth-child(1) {
   color: #3c9653;
-}
-
-.grid-item span:nth-child(2) {
-  font-size: 17px;
 }
 
 .grid-item + .grid-item {
@@ -70,8 +73,6 @@
 
 .boardgame-price {
   width: 125px;
-  // margin-top: 5px;
-  // margin: auto;
   color: #C3073F;
   display: flex;
   flex-direction: column;
@@ -80,9 +81,15 @@
   }
 }
 
+.price {
+  display: flex;
+  flex-direction: column;
+}
+
 .unknown-price {
   text-align: center;
   font-size: 17px;
+  color: white;
 }
 
 .price-header {
@@ -95,4 +102,30 @@
 .best-available-price-header {
   font-size: 14px;
   color: white;
+}
+
+.menu-container {
+  min-width: 165px;
+}
+
+.menu-container button {
+  border: none;
+  border-radius: 5px;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 7px 10px;
+  color: black;
+  cursor: pointer;
+}
+
+.menu-container span {
+  padding-left: 5px;
+}
+
+.add-to-wishlist-button {
+  background-color: $dark-pink;
+}
+
+.on-wishlist-button {
+  background-color: green;
 }

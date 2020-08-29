@@ -12,6 +12,7 @@
     "@types/react-dom": "^16.9.8",
     "cors-anywhere": "^0.4.3",
     "cross-env": "^7.0.2",
+    "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -20,7 +21,7 @@
     "xml-js": "^1.6.11"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
+    "start": "cross-env BROWSER=none react-scripts start --no-cache",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
